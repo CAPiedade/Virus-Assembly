@@ -25,6 +25,7 @@ This code will generate large amounts of data, so be prepared to have to use
 + The size of the outputs 
 + How to transform every virus PDB into a PDB that every chain is in different models
 + To test it for a big list of virus (which seems impossible with the size of the outputs)
++ If some aminoacids are incomplete
 
 #### Author
 
