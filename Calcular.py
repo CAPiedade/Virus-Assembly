@@ -16,9 +16,11 @@ ASU = 4
 T = 4
 for PDB in os.listdir(os.curdir):
     if PDB[-3:]=='pdb':
+        print(PDB)
         virus = parse_PDB(PDB)
+        print(len(virus))
         dicionario = calculate_number_bonds(virus)
-        D = open("dic_lig_"+PDB[:-4]+".txt",'w')
+        Dicionario = open("dic_lig_"+PDB[:-4]+".txt",'w')
         for i in dicionario:
             print (dicionario[i], file=Dicionario)
         Dicionario.close()

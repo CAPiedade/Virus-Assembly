@@ -289,7 +289,10 @@ def del_and_compare(num,dicmol,ASU):
 	       L.append(i+1)
     Dicionario = open("Dicionario.txt",'w')
     for i in dicmol:
-	       print (dicmol[i], file=Dicionario)
+        if len(dicmol[i])==0:
+            continue
+        else:
+            print (dicmol[i], file=Dicionario)
     Dicionario.close()
     for cnj in list(itertools.combinations(L,num)):
         if list(cnj)[0]<=ASU:
@@ -303,21 +306,18 @@ def del_and_compare(num,dicmol,ASU):
             for i in list(cnj):
                 NovoDic.pop(i)
             for line in sorted(NovoDic.keys()):
-                if NovoDic[line]==[]:
-                    continue
-                else:
-                    print("MODEL", str(line),sep="\t", file=Ficheiro)
-                    for i in NovoDic[line]:
-                        i = i.strip("'] ")
-                        i = i.strip()
-                        j=i
-                        if i[-1]==']':
-                            print(i[:-2],file=Ficheiro)
-                        else:
-                            print (i , file = Ficheiro)
-                    j=j.split()
-                    print("TER","  ",int(j[1])+1,"    ",j[3]+" "+j[4]+" "+j[5], file = Ficheiro)
-                    print("ENDMDL", file = Ficheiro)
+                print("MODEL", str(line),sep="\t", file=Ficheiro)
+                for i in NovoDic[line]:
+                    i = i.strip("'] ")
+                    i = i.strip()
+                    j=i
+                    if i[-1]==']':
+                        print(i[:-2],file=Ficheiro)
+                    else:
+                        print (i , file = Ficheiro)
+                j=j.split()
+                print("TER","  ",int(j[1])+1,"    ",j[3]+" "+j[4]+" "+j[5], file = Ficheiro)
+                print("ENDMDL", file = Ficheiro)
             Ficheiro.close()
             V = compare("Estrutura"+str(cnj)+".pdb","Del"+str(num))
             if V == 0:
