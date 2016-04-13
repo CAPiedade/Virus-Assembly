@@ -2,7 +2,6 @@
 from __future__ import print_function
 import math
 import itertools
-import ast
 import os
 import numpy
 
