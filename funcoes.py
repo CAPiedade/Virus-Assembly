@@ -324,7 +324,7 @@ def del_and_compare(num,dicmol,ASU):
             Ficheiro = open("Estrutura Negativa" + str(cnj)+".pdb",'w')
             for line in sorted(InvDic.keys()):
                 print("MODEL", str(line),sep="\t", file=Ficheiro)
-                for i in NovoDic[line]:
+                for i in InvDic[line]:
                     i = i.strip("'] ")
                     i = i.strip()
                     j=i
