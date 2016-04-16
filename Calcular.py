@@ -24,12 +24,12 @@ for PDB in os.listdir(os.curdir):
         dicionario = calculate_number_bonds(virus)
         Dicionario = open("dic_lig_"+PDB[:-4]+".txt",'w')
         for i in dicionario:
-            print (dicionario[i], file=Dicionario)
+            print (i,'\t',dicionario[i], file=Dicionario)
         Dicionario.close()
         os.rename("dic_lig_"+PDB[:-4]+".txt",PDB[:-4]+"/"+"dic_lig_"+PDB[:-4]+".txt")
         os.chdir(str(PDB[:-4]))
         L = model(PDB)
-        for d in range(60*T):
+        for d in range(60*T/2):
             del_and_compare(d+1,L,ASU)
             os.chdir('Del'+str(d+1))
             for struct in os.listdir(os.curdir):
@@ -51,6 +51,26 @@ for PDB in os.listdir(os.curdir):
                 for lines in sasa:
                     print (lines.strip(), file = Fich)
                 Fich.close()
+            os.chdir('../Del'+str(60-d-1))
+            for struct in os.listdir(os.curdir):
+                s = 0
+                h = 0
+                p = 0
+                modelsout = re.findall(r'\d+',struct)
+                modelsout2 = []
+                for element in modelsout:
+                    modelsout2.append(int(element))
+                for (i,j) in dicionario:
+                    if i not in modelsout2 and j not in modelsout2:
+                        s += dicionario[(i,j)][0]
+                        p += dicionario[(i,j)][1]
+                        h += dicionario[(i,j)][2]
+                sasa = SASA(struct)
+                Fich = open("Data"+struct[9:-4]+'.txt','w')
+                print ("Salt Bridges:\t"+str(s),"Phobic Contacts:\t "+str(p),"HydrogenBonds:\t"+str(h), sep='\n' , file = Fich)
+                for lines in sasa:
+                    print (lines.strip(), file = Fich)
+                Fich.close()
             os.chdir('..')
         os.chdir('..')
-
+        

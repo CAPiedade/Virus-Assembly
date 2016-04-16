@@ -283,6 +283,7 @@ def del_and_compare(num,dicmol,ASU):
     L=[]
     DelDic ={}
     NovoDic = {}
+    InvDic={}
     os.mkdir("Del"+str(num))
     for i in range(len(dicmol)):
 	       L.append(i+1)
@@ -304,7 +305,8 @@ def del_and_compare(num,dicmol,ASU):
                 x = x.split(',')
                 NovoDic[line+1]=x
             for i in list(cnj):
-                NovoDic.pop(i)
+                InvDic[i]=NovoDic[i]
+                del NovoDic[i]
             for line in sorted(NovoDic.keys()):
                 print("MODEL", str(line),sep="\t", file=Ficheiro)
                 for i in NovoDic[line]:
@@ -319,11 +321,29 @@ def del_and_compare(num,dicmol,ASU):
                 print("TER","  ",int(j[1])+1,"    ",j[3]+" "+j[4]+" "+j[5], file = Ficheiro)
                 print("ENDMDL", file = Ficheiro)
             Ficheiro.close()
-            V = compare("Estrutura"+str(cnj)+".pdb","Del"+str(num))
-            if V == 0:
-                os.remove("Estrutura" + str(cnj)+".pdb")
-            elif V == 1:
-                os.rename("Estrutura" + str(cnj)+".pdb","Del"+str(num)+"/Estrutura " + str(cnj)+".pdb")
+            Ficheiro = open("Estrutura Negativa" + str(cnj)+".pdb",'w')
+            for line in sorted(InvDic.keys()):
+                print("MODEL", str(line),sep="\t", file=Ficheiro)
+                for i in NovoDic[line]:
+                    i = i.strip("'] ")
+                    i = i.strip()
+                    j=i
+                    if i[-1]==']':
+                        print(i[:-2],file=Ficheiro)
+                    else:
+                        print (i , file = Ficheiro)
+                j=j.split()
+                print("TER","  ",int(j[1])+1,"    ",j[3]+" "+j[4]+" "+j[5], file = Ficheiro)
+                print("ENDMDL", file = Ficheiro)
+            Ficheiro.close()
+            #V = compare("Estrutura"+str(cnj)+".pdb","Del"+str(num))
+            #if V == 0:
+                #os.remove("Estrutura" + str(cnj)+".pdb")
+            #elif V == 1:
+            os.rename("Estrutura" + str(cnj)+".pdb","Del"+str(num)+"/Estrutura " + str(cnj)+".pdb")
+            os.rename("Estrutura Negativa" + str(cnj)+".pdb","Del"+str(60-num)+"/Estrutura Negativa " + str(cnj)+".pdb")
+            NovoDic={}
+            InvDic={}
     os.remove('Dicionario.txt')
     return
 
@@ -508,4 +528,3 @@ def calculate_number_bonds(structure):
 def SASA(ficheiro):
 	output = os.popen("freesasa -m -S -n 10000 -t 8 '"+str(ficheiro)+"'")
 	return output
-
