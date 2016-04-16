@@ -12,20 +12,20 @@ import re
 
 
 
-ASU = 4
-T = 4
+ASU = 1
+T = 1
 for PDB in os.listdir(os.curdir):
     if PDB[-3:]=='pdb':
         print(PDB)
         virus = parse_PDB(PDB)
         print(len(virus))
+        os.mkdir(PDB[:-4])
+        os.system("cp "+PDB+" "+PDB[:-4]+"/"+PDB)
         dicionario = calculate_number_bonds(virus)
         Dicionario = open("dic_lig_"+PDB[:-4]+".txt",'w')
         for i in dicionario:
             print (dicionario[i], file=Dicionario)
         Dicionario.close()
-        os.mkdir(PDB[:-4])
-        os.system("cp "+PDB+" "+PDB[:-4]+"/"+PDB)
         os.rename("dic_lig_"+PDB[:-4]+".txt",PDB[:-4]+"/"+"dic_lig_"+PDB[:-4]+".txt")
         os.chdir(str(PDB[:-4]))
         L = model(PDB)
@@ -53,3 +53,4 @@ for PDB in os.listdir(os.curdir):
                 Fich.close()
             os.chdir('..')
         os.chdir('..')
+

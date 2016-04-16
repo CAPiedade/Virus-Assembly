@@ -252,16 +252,16 @@ def model(PDB):
 	ATOM_PDB=[]
 	model={}
 	m = 0
-	for i in F:
+	for i in F.readlines():
 		i= i.strip()
 
 		if i.startswith("MODEL"):
 			ATOM_PDB=[]
 		elif i.startswith("ATOM"):
 			ATOM_PDB.append(i)
-		elif i.startswith("ENDMDL"):
-			m +=1
-			model[m]=ATOM_PDB
+#		elif i.startswith("ENDMDL"):
+#			m +=1
+#			model[m]=ATOM_PDB
 		elif i.startswith("TER"):
 			m +=1
 			model[m]=ATOM_PDB
@@ -286,6 +286,7 @@ def del_and_compare(num,dicmol,ASU):
     os.mkdir("Del"+str(num))
     for i in range(len(dicmol)):
 	       L.append(i+1)
+    print(len(L))
     Dicionario = open("Dicionario.txt",'w')
     for i in dicmol:
         if len(dicmol[i])==0:
@@ -507,3 +508,4 @@ def calculate_number_bonds(structure):
 def SASA(ficheiro):
 	output = os.popen("freesasa -m -S -n 10000 -t 8 '"+str(ficheiro)+"'")
 	return output
+
