@@ -285,6 +285,7 @@ def del_and_compare(num,dicmol,ASU):
     NovoDic = {}
     InvDic={}
     os.mkdir("Del"+str(num))
+    os.mkdir("Del"+str(60-num))
     for i in range(len(dicmol)):
 	       L.append(i+1)
     print(len(L))
