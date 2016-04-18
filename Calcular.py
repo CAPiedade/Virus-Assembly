@@ -51,6 +51,7 @@ for PDB in os.listdir(os.curdir):
                 for lines in sasa:
                     print (lines.strip(), file = Fich)
                 Fich.close()
+            os.system("rm Estrutura*")
             os.chdir('../Del'+str(60-d-1))
             for struct in os.listdir(os.curdir):
                 s = 0
@@ -61,7 +62,7 @@ for PDB in os.listdir(os.curdir):
                 for element in modelsout:
                     modelsout2.append(int(element))
                 for (i,j) in dicionario:
-                    if i not in modelsout2 and j not in modelsout2:
+                    if i in modelsout2 and j in modelsout2:
                         s += dicionario[(i,j)][0]
                         p += dicionario[(i,j)][1]
                         h += dicionario[(i,j)][2]
@@ -71,6 +72,6 @@ for PDB in os.listdir(os.curdir):
                 for lines in sasa:
                     print (lines.strip(), file = Fich)
                 Fich.close()
+            os.system("rm Estrutura*")
             os.chdir('..')
         os.chdir('..')
-        
