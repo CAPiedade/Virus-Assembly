@@ -4,6 +4,7 @@ import math
 import itertools
 import os
 import numpy
+import re
 
 atom_masses = {
     "RU" : 102.91,
@@ -279,7 +280,7 @@ def vecdist(A,B):
 	Dist = math.sqrt((A[0]-B[0])**2+(A[1]-B[1])**2 + (A[2]-B[2])**2)
 	return round(Dist,3)
 
-def del_and_compare(num,dicmol,ASU):
+def del_and_compare(num,dicmol,ASU,dicionario):
     L=[]
     DelDic ={}
     NovoDic = {}
@@ -337,12 +338,31 @@ def del_and_compare(num,dicmol,ASU):
                 print("TER","  ",int(j[1])+1,"    ",j[3]+" "+j[4]+" "+j[5], file = Ficheiro)
                 print("ENDMDL", file = Ficheiro)
             Ficheiro.close()
-            #V = compare("Estrutura"+str(cnj)+".pdb","Del"+str(num))
-            #if V == 0:
-                #os.remove("Estrutura" + str(cnj)+".pdb")
-            #elif V == 1:
-            os.rename("Estrutura" + str(cnj)+".pdb","Del"+str(num)+"/Estrutura " + str(cnj)+".pdb")
-            os.rename("Estrutura Negativa" + str(cnj)+".pdb","Del"+str(60-num)+"/Estrutura Negativa " + str(cnj)+".pdb")
+            V = compare("Estrutura Negativa"+str(cnj)+".pdb","Del"+str(60-num))
+            if V == 0:
+                os.remove("Estrutura" + str(cnj)+".pdb")
+                os.remove("Estrutura Negativa"+str(cnj)+".pdb")
+            elif V == 1:
+                s = 0
+                h = 0
+                p = 0
+                modelsout = re.findall(r'\d+',str(cnj))
+                modelsout2 = []
+                for element in modelsout:
+                    modelsout2.append(int(element))
+                for (i,j) in dicionario:
+                    if i not in modelsout2 and j not in modelsout2:
+                        s += dicionario[(i,j)][0]
+                        p += dicionario[(i,j)][1]
+                        h += dicionario[(i,j)][2]
+                Fich = open("Data"+str(cnj)+'.txt','w')
+                print ("Salt Bridges:\t"+str(s),"Phobic Contacts:\t "+str(p),"HydrogenBonds:\t"+str(h), sep='\n' , file = Fich)
+                sasa = SASA("Estrutura"+str(cnj)+".pdb")
+                for lines in sasa:
+                    print (lines.strip(), file = Fich)
+                Fich.close()
+                os.rename("Data" + str(cnj)+".txt","Del"+str(num)+"/Data" + str(cnj)+".txt")
+                os.rename("Estrutura Negativa" + str(cnj)+".pdb","Del"+str(60-num)+"/Estrutura Negativa " + str(cnj)+".pdb")
             NovoDic={}
             InvDic={}
     os.remove('Dicionario.txt')
@@ -526,6 +546,6 @@ def calculate_number_bonds(structure):
     return dicionario
 
 
-def SASA(ficheiro):
-	output = os.popen("freesasa -m -S -n 10000 -t 8 '"+str(ficheiro)+"'")
+def SASA(ficheiro,n=1000):
+	output = os.popen("freesasa -m -S -n "+str(n)+" -t 8 '"+str(ficheiro)+"'")
 	return output
