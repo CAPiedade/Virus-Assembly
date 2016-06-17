@@ -7,12 +7,14 @@ from SymmetryClassGroupsFunction import *
 
 
 
-for i in range(14,30):
+for i in range(5,30):
     File = open('GroupsSymmetry'+str(i+1)+'.txt','w')
     print("Classes de Remover",i+1, sep='\t',file=File)
+    print("Classes",i+1)
     subg = subgroupmaker(60,i+1)
     for j in subg.keys():
         print(j,subg[j],len(subg[j]),sep='\t',file=File)
+        #print(j)
         continue
     File.close()
 
