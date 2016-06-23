@@ -1,7 +1,9 @@
 from __future__ import print_function
+from time import time
+# "time is a comodity that should have to be imported"
 import itertools
-from sympy.combinatorics import *
-import numpy as np
+from sympy.combinatorics import PermutationGroup, Permutation
+from scipy.misc import comb
 
 
 S = PermutationGroup([Permutation(),
@@ -66,45 +68,111 @@ Permutation(0,36,7,49,58)(1,37,8,45,59)(2,38,9,46,55)(3,39,5,47,56)(4,35,6,48,57
 Permutation(0,14,31,42,38)(1,10,32,43,39)(2,11,33,44,35)(3,12,34,40,36)(4,13,30,41,37)(5,28,57,21,19)(6,29,58,22,15)(7,25,59,23,16)(8,26,55,24,17)(9,27,56,20,18)(45,47,49,46,48)(50,53,51,54,52)])
 
 def onelistmaker(n):
-    listofone = [1] * n
-    return listofone
+    """Creates a list of n 1's"""
+    #TODO: see if numpy.ones() is a better alternative
+    return [1] * n
 
-
-def classmaker(size, n):
-    n_class=[]
+def class_generator(size, n):
+    """Generator: creates a list with 1's with size, then marks with a 0 then
+       indexes returned by combinations(range(size), n).
+       if n > 0, first position must be marked."""
+       
+    # TODO: see if numpy fancy boolean indexing does the same job
+    
     if n == 0:
-        n_class[0]=[1]*size
-        return n_class
+        yield onelistmaker(size)
+        return
 
-    for it in itertools.combinations(range(size),n):
-        if it[0]==0:
-            Lista = onelistmaker(size)
-            for pos in it:
-                Lista[pos]=0
-            n_class.append(Lista)
-    return n_class
+    for comb in itertools.combinations(range(size), n):
+        if comb[0] != 0: # combinations come in lexicographic order
+            break        # the ones with comb[0] == 0 come first!
+        
+        index_pos = onelistmaker(size)
+        for p in comb:
+            index_pos[p]=0
+        yield index_pos
+        #n_class.append(index_pos)
+    return #n_class
 
-def subgroupmaker(size,n):
-    subgroups={}
-    for i in classmaker(size,n):
-        if len(subgroups)==0:
-            subgroups[tuple(i)]=[i]
-        perm=[]
-        for pepe in S:
-            perm.append(pepe(i))
-        value = 1
-        for p in perm:
-            if tuple(p) in subgroups.keys():
-                subgroups[tuple(p)].append(i)
-                value = 0
-        if value == 1:
-            subgroups[tuple(i)]=[i]
+def subgroupmaker(size, n, verbose=False, quit_after=None):
+    subgroups = {}
+    
+    nexpected = comb(size-1, n-1, exact=True)
+    if quit_after is None:
+        quit_after = nexpected
+    
+    # for verbose output
+    t0 = time()
+    fstring = '-> class {} / {}   {:.2f} s  {:.2f} %'.format
+    
+    for i, c in enumerate(class_generator(size, n)):
+        if i + 1 > quit_after:
+            break
+        if i % 100 == 0:
+            if verbose:
+                perc = float(i) / nexpected * 100
+                elapsed = time() - t0
+                print(fstring(i, nexpected, elapsed, perc))
+                #print (i)
 
-    for sub in subgroups.keys():
-        sub2 = []
-        for item in subgroups[sub]:
-            sub2.append(tuple(item))
+        c = tuple(c)
+        
+        # for the first class, just create the first subclass
+        if len(subgroups) == 0:
+            subgroups[c] = [c]
+        else:
+            # if any permutation of c is equal to a subgroup
+            # (a key in dict subgroups)
+            # append c to that subgroup, otherwise create a new subgroup
+            for pepe in S:
+                tp = tuple(pepe(c))
+                if tp in subgroups: # in the keys!
+                    subgroups[tp].append(c)
+                    break
+            else:
+                subgroups[c]=[c]
 
-        subgroups[sub]=list(set(sub2))
-
+# old code
+# no longer necessary: classes are unique
+##     for sub in subgroups:
+##         sub2 = [tuple(item) for item in subgroups[sub]]
+##         subgroups[sub]=list(set(sub2))
+    
+    print()
     return subgroups
+
+def test():
+    print('Testing class_generator(size, n) -----------')
+    fstring = '\nclass_generator({}, {}) -- expected {}'.format
+    
+    for i1,i2 in (0, 0), (8, 0), (8, 2), (8, 3):
+        nexpected = comb(i1-1, i2-1, exact=True)
+        
+        print(fstring(i1, i2, nexpected))
+        
+        for i, c in enumerate(class_generator(i1, i2)):
+            print (i+1, ':', c)
+    
+    print('\nTesting subgroupmaker(size, n) -----------')
+    
+    quit_after = None #100000
+    print('subgroupmaker(60, 6, quit_after={}) ----'.format(quit_after))
+    
+    subgroups = subgroupmaker(60, 6, quit_after=quit_after, verbose=True)
+    
+    n_subs = len(subgroups)
+    n_classes = sum([(len(v)) for v in subgroups.values()])
+    
+    print ('===== {} classes, {} subgroups ====='.format(n_classes, n_subs))
+
+##     for k, v in subgroups.items():
+##         print ('{:5}: {}'.format(len(v), k))
+##         for i in v:
+##             print ('   ', i)
+
+if __name__ == '__main__':
+    test()
+
+## -> class 5006300 / 5006386   2517.84 s  100.00 %
+
+## ===== 5006386 classes, 835476 subgroups =====
