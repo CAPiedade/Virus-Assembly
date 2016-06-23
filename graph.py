@@ -1,5 +1,11 @@
+ #-*- coding:latin1 -*-f
+
 from igraph import *
+
 import numpy as np
+import sys
+sys.path.append( '/usr/lib/python2.7/dist-packages/')
+
 g = Graph()
 f = Graph()
 G1 = Graph()
@@ -113,6 +119,8 @@ while Logical:
                     ligacoes[l].append(d)
     if size>1:
         Logical = False
+    else:
+        print size
 
 
 G = Graph()
@@ -150,5 +158,18 @@ for el in sorted(ligacoes.keys()):
                 indice2 = G.vs['label'].index(lig)
 
             G.add_edges([(indice1,indice2)])
-print(G)
-plot(G, layout='rt', bbox = (8000,8000))
+
+G.to_directed(mutual=False)
+
+
+G.save("GG.GraphML")
+
+plot(G,bbox = (10000,10000),layout='sugiyama')#, layout='rt', )
+
+from graph_tool import *
+Gn = load_graph("GG.GraphML", fmt="graphml")
+
+
+
+pos = sfdp_layout(Gn)
+graph_draw(Gn, pos=pos, output="graph-draw-sfdp.pdf")

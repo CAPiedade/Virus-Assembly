@@ -276,9 +276,9 @@ def nCr(n,k):
 	C = f(n)/(f(k)*f(n-k))
 	return C
 
-def vecdist(A,B):
+def vecdist(A,B,r=3):
 	Dist = math.sqrt((A[0]-B[0])**2+(A[1]-B[1])**2 + (A[2]-B[2])**2)
-	return round(Dist,3)
+	return round(Dist,r)
 
 def del_and_compare(num,dicmol,ASU,dicionario):
     L=[]
@@ -363,6 +363,7 @@ def del_and_compare(num,dicmol,ASU,dicionario):
                 Fich.close()
                 os.rename("Data" + str(cnj)+".txt","Del"+str(num)+"/Data" + str(cnj)+".txt")
                 os.rename("Estrutura Negativa" + str(cnj)+".pdb","Del"+str(60-num)+"/Estrutura Negativa " + str(cnj)+".pdb")
+                os.system("rm Estrutura*")
             NovoDic={}
             InvDic={}
     os.remove('Dicionario.txt')
@@ -400,7 +401,7 @@ def rigid_transform_3D(A, B):
 
     # special reflection case
     if linalg.det(R) < 0:
-       print ("Reflection detected")
+       #print ("Reflection detected")
        Vt[2,:] *= -1
        R = Vt.T * U.T
 
@@ -458,6 +459,7 @@ def compare(ficheiro,pasta):
         except:
             continue
         if erro < 3:
+            print (erro)
             return 0
 
     return 1
