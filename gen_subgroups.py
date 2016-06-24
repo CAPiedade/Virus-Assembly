@@ -1,5 +1,5 @@
 from __future__ import print_function
-from SymmetryClassGroupsFunction import subgroupmaker, subgroups_tofile
+from subgroups import subgroupmaker, subgroups_tofile
 
 #for i in range(6, 31):
 for i in range(1, 6):
