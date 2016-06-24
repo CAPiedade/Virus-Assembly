@@ -1,6 +1,6 @@
 from __future__ import print_function
 from time import time
-# "time is a comodity that should have to be imported"
+# "time is a comodity that should not have to be imported"
 import itertools
 from sympy.combinatorics import PermutationGroup, Permutation
 from scipy.misc import comb
@@ -73,16 +73,20 @@ def ones(n):
     return [1] * n
 
 def class2int(c):
+    """Converts a tuple or list of binary values (0 or 1s) into an integer."""
     return int(''.join([str(i) for i in c]), 2)
 
 def int2class(i, size):
+    """Converts an integer into a list of 0s and 1s, Padding left
+       with zeros to ensure size, if necessary."""
     i_str = bin(i)[2:].zfill(size)
     return [int(d) for d in i_str]
     
 def class_generator(size, n):
-    """Generator: creates a list with 1's with size, then marks with a 0 then
-       indexes returned by combinations(range(size), n).
-       if n > 0, first position must be marked."""
+    """Generator: creates a list with 1's with size, then marks with a 0
+       in the location of the indexes returned by combinations(range(size), n).
+       if n > 0, only the combinations with the first position marked
+       are considered."""
        
     # TODO: see if numpy fancy boolean indexing does the same job
     
@@ -101,76 +105,91 @@ def class_generator(size, n):
     return
 
 def subgroupmaker(size, n, verbose=False, quit_after=None):
+    """Computes the elements of subgroups of classes of 60 elements, given
+       the permutations group S, above.
+       
+       Result is a dicionary where each key is a class representative of
+       the subgroup, (a binary tuple), and values are
+       the number of elements in each subgroup."""
+
     subgroups = {}
     
+    # compute total number of classes to be processed
     nexpected = comb(size-1, n-1, exact=True)
     if quit_after is None:
         quit_after = nexpected
     
-    # for verbose output
+    # for verbose reporting
     t0 = time()
-    fstring = '-> class {} / {}   {:.2f} s  {:.2f} %'.format
+    fstring = '-> class {} / {}, {} subgroups.  {:.2f} s  {:.2f} %'.format
     
     for i, c in enumerate(class_generator(size, n)):
         if i + 1 > quit_after:
             break
-        if i % 100 == 0:
-            if verbose:
-                perc = float(i) / nexpected * 100
-                elapsed = time() - t0
-                print(fstring(i, nexpected, elapsed, perc))
-                #print (i)
-        
+
         c = tuple(c)
-        #i_c = class2int(c)
 
         # for the first class, just create the first subclass
-        if len(subgroups) == 0:
-            subgroups[c] = [c]
+        if i == 0:
+            subgroups[c] = 1
         else:
             # if any permutation of c is equal to a subgroup
             # (a key in dict subgroups)
-            # append c to that subgroup, otherwise create a new subgroup
+            # increment value, otherwise create a new subgroup
             for perm in S:
                 tp = tuple(perm(c))
                 if tp in subgroups: # in the keys!
-                    subgroups[tp].append(c)
+                    subgroups[tp] += 1
                     break
             else:
-                subgroups[c]=[c]
+                subgroups[c] = 1
+        
+        if i % 100 == 0:
+            if verbose:
+                ip1 = i+1
+                perc = float(ip1) / nexpected * 100
+                elapsed = time() - t0
+                print(fstring(ip1, nexpected, len(subgroups), elapsed, perc))
 
-# old code
-# no longer necessary: classes are unique
-##     for sub in subgroups:
-##         sub2 = [tuple(item) for item in subgroups[sub]]
-##         subgroups[sub]=list(set(sub2))
-    
-    print()
+    if verbose:
+        perc = float(i) / nexpected * 100
+        elapsed = time() - t0
+        print(fstring(i, nexpected, len(subgroups), elapsed, perc))
+
     return subgroups
+
 
 def subgroups_tofile(subgroups, filename, n):
     with open(filename, 'w') as f:
-        print("# Classes de Remover", n, sep='\t', file=f)
-        for subgroup, sublist in subgroups.items():
-            i_sub = str(class2int(subgroup))
-            i_sublist = '\t'.join([str(class2int(c)) for c in sublist])
-            print('{}\t{}'.format(i_sub, i_sublist), file=f)
+        print("# Removing {}. Subgroups: {}".format(n, len(subgroups)), file=f)
+        for subgroup, n_elements in subgroups.items():
+            i_sub = class2int(subgroup)
+            print('{}\t{}'.format(i_sub, n_elements), file=f)
+
 
 def subgroups_fromfile(filename, size):
     subgroups = {}
     with open(filename) as f:
         for line in f:
-            if line.startswith('#'):
-                continue
             line = line.strip()
-            if len(line) == 0:
+            if line.startswith('#') or len(line) == 0:
                 continue
-            i_classes = [int(c) for c in line.split('\t')]
-            i_classes = [tuple(int2class(c, size)) for c in i_classes]
-            subgroups[i_classes[0]] = i_classes[1:]
+            i_sub, n_elements = line.split('\t')
+            subgroups[tuple(int2class(int(i_sub), size))] = int(n_elements)
     return subgroups
-            
-    
+
+
+def subgroups_fromfile_generator(filename, size):
+    with open(filename) as f:
+        for line in f:
+            line = line.strip()
+            if line.startswith('#') or len(line) == 0:
+                continue
+            i_sub, n_elements = line.split('\t')
+            yield tuple(int2class(int(i_sub), size)), int(n_elements)
+    return
+
+
 def test():
     print('Testing class_generator(size, n) -----------')
     fstring = '\nclass_generator({}, {}) -- expected {}'.format
@@ -185,37 +204,39 @@ def test():
             back_c = int2class(cint, size)
             print (i+1, ':', c, '=', cint, '=', back_c)
             assert c == back_c
-    
+
+    for n in range(5, 30):
+        nexpected = comb(60-1, n, exact=True)
+        print(fstring(60, n+1, nexpected))
+
     print('\nTesting subgroupmaker(size, n) -----------')
     
-    quit_after = 100000
+    quit_after = 10000
     print('subgroupmaker(60, 6, quit_after={}) ----'.format(quit_after))
     
     subgroups = subgroupmaker(60, 6, quit_after=quit_after, verbose=True)
     
     n_subs = len(subgroups)
-    n_classes = sum([(len(v)) for v in subgroups.values()])
+    n_classes = sum(subgroups.values())
     
     print ('===== {} classes, {} subgroups ====='.format(n_classes, n_subs))
     
     print('\nTesting writing to and reading  from file ---')
     subgroups_tofile(subgroups, 'test.txt', 6)
     print('\nWriting to test.txt is done ---')
-    subgroups2 = subgroups_fromfile('test.txt', 60)
-    print('\nReading from test.txt is done ---')
-    
+    #subgroups2 = subgroups_fromfile('test.txt', 60)
+    #print('\nReading from test.txt is done ---')
+
     test_int = 31525197391593471
     test_key = tuple(int2class(test_int, 60))
-    
+
     print('\nIn original:')
-    print('subgroup', test_key)
-    for v in subgroups[test_key]:
-        print('   ', v)
-    
-    print('After reading:')
-    print('subgroup', test_key)
-    for v in subgroups2[test_key]:
-        print('   ', v)
+    print('subgroup {}:\n{}'.format(test_key, subgroups[test_key]))
+    for sub, n in subgroups_fromfile_generator('test.txt', 60):
+        if sub == test_key:
+            print('After reading:')
+            print('subgroup {}:\n{}'.format(sub, n))
+            break
 
 if __name__ == '__main__':
     test()
