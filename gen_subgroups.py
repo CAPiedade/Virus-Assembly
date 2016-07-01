@@ -1,8 +1,9 @@
 from __future__ import print_function
 from subgroups import subgroupmaker, subgroups_tofile
+import gc
 
 #for i in range(6, 31):
-for i in range(1, 6):
+for i in range(53, 54):
     filename = 'GroupsSymmetry{}.txt'.format(i)
     print('Creating {}'.format(filename))
     subgroups = subgroupmaker(60, i, verbose=True)

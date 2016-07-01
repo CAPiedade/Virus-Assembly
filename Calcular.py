@@ -1,5 +1,6 @@
  #-*- coding:latin1 -*-f
 from __future__ import print_function
+import sys
 #from HydroBonds import *
 from funcoes import *
 import os
@@ -11,7 +12,7 @@ import re
 
 
 
-
+os.chdir("EstruturasT1")
 ASU = 1
 T = 1
 for PDB in os.listdir(os.curdir):
@@ -19,10 +20,18 @@ for PDB in os.listdir(os.curdir):
         print(PDB)
         virus = parse_PDB(PDB)
         print(len(virus))
-        os.mkdir(PDB[:-4])
-        os.system("cp "+PDB+" "+PDB[:-4]+"/"+PDB)
-        dicionario = calculate_number_bonds(virus)
-        Dicionario = open("dic_lig_"+PDB[:-4]+".txt",'w')
-        for i in dicionario:
-            print (i,'\t',dicionario[i], file=Dicionario)
-        Dicionario.close()
+        if len(virus) !=60:
+            continue
+        else:
+            try:
+                os.mkdir(PDB[:-4])
+                os.system("cp "+PDB+" "+PDB[:-4]+"/"+PDB)
+                dicionario = calculate_number_bonds(virus)
+                Dicionario = open("dic_lig_"+PDB[:-4]+".txt",'w')
+                for i in dicionario:
+                    print (i,'\t',dicionario[i], file=Dicionario)
+                Dicionario.close()
+                os.system("mv dic_lig_"+PDB[:-4]+".txt "+PDB[:-4]+"/.")
+            except:
+                print(sys.exc_info())
+                continue
