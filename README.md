@@ -1,6 +1,7 @@
 # Virus-Assembly
 
 Python2.7 Code designed to calculate the interactions of a T=1 Virus Capsid based on the group symmetry of the arrangement of the proteins.
+
 This code allows to generate the different combinations of removing [i]N[\i] proteins of a capsid based on the Icosahedral Group Symmetry.
 
 
