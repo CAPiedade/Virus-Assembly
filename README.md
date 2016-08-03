@@ -1,4 +1,4 @@
-# Virus-Assembly
+# Virus Disassembly
 
 Python2.7 Code designed to calculate the interactions of a T=1 Virus Capsid based on the group symmetry of the arrangement of the proteins.
 
