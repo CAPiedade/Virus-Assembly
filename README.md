@@ -1,7 +1,9 @@
-# Virus-Assembly
+# Virus Disassembly
 
-Python2.7 Code designed to calculate the interactions and SASA of a Virus Complex.
-NOT FINISHED!
+Python2.7 Code designed to calculate the interactions of a T=1 Virus Capsid based on the group symmetry of the arrangement of the proteins.
+
+This code allows to generate the different combinations of removing *N* proteins of a capsid based on the Icosahedral Group Symmetry.
+
 
 #### Use
 
@@ -12,7 +14,7 @@ The PDB file must have each chain in a different model for it to work.
 
 + Numpy
 + BioPython
-+ [FreeSASA](https://github.com/mittinatten/freesasa) 
++ Anaconda Python is reccomended for other modules
 
 (anyothers that you may find, please inform me to add)
 
@@ -22,9 +24,6 @@ This code will generate large amounts of data, so be prepared to have to use
 
 #### Problems Still to Solve
 
-+ The size of the outputs 
-+ How to transform every virus PDB into a PDB that every chain is in different models
-+ To test it for a big list of virus (which seems impossible with the size of the outputs)
 + If some aminoacids are incomplete
 
 #### Author
