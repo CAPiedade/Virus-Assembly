@@ -3,9 +3,9 @@ import os
 import sys
 import urllib
 
-os.mkdir("EstruturasT1")
+os.mkdir("EstruturaspT3")
 
-T1_IDs= open("ListT1.txt",'r')
+T1_IDs= open("ListpT3.txt",'r')
 
 for line in T1_IDs.readlines():
     line = line.strip()
@@ -13,7 +13,7 @@ for line in T1_IDs.readlines():
     if line[0]!='n':
         print line[1]
         urllib.urlretrieve("http://www.rcsb.org/pdb/files/"+line[1].upper()+".pdb1.gz", line[1]+".pdb1.gz")
-        os.system("gunzip < "+line[1]+".pdb1.gz >EstruturasT1/"+line[1]+".pdb")
+        os.system("gunzip < "+line[1]+".pdb1.gz >EstruturaspT3/"+line[1]+".pdb")
         os.system("rm -r "+line[1]+".pdb1.gz")
 
-T1_IDs.cloes()
+T1_IDs.close()

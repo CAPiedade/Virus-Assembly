@@ -16,7 +16,7 @@ os.chdir("EstruturasT1")
 ASU = 1
 T = 1
 for PDB in os.listdir(os.curdir):
-    if PDB[-3:]=='pdb':
+    if PDB[-4:]=='.pdb':
         print(PDB)
         virus = parse_PDB(PDB)
         print(len(virus))
@@ -32,6 +32,7 @@ for PDB in os.listdir(os.curdir):
                     print (i,'\t',dicionario[i], file=Dicionario)
                 Dicionario.close()
                 os.system("mv dic_lig_"+PDB[:-4]+".txt "+PDB[:-4]+"/.")
+                os.system('rm '+PDB)
             except:
                 print(sys.exc_info())
                 continue

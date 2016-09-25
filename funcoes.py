@@ -229,7 +229,7 @@ def centroid(DicAtom):
 
 	return Cad
 
-hydrophobe = ['ALA','VAL','LEU','ILE','MET','PHE','TYR','TRP']
+
 
 def numhydrophobe(centroid,ficheiro):
 	F = open(ficheiro+'.txt','w')
@@ -491,8 +491,8 @@ acidic = ['ASP','GLU']
 basic = ['ARG','LYS']
 donor = ['ARG','ASN','CYS','GLN','HIS','LYS','SER','THR','TRP','TYR']
 donoratom = ['NE','NH1','NH2','ND2','SG','NE2','ND1','NZ','OG','OG1','NE1','OH']
-acceptor = ['ASN','ASP','GLN','GLU','HIS','SD','SER','THR','TYR']
-acceptoratom = ['OD1','OD2','OE1','OE2','ND1','NE2','SD','OG','OG1','OH']
+acceptor = ['ASN','ASP','GLN','GLU','HIS','SER','THR','TYR']
+acceptoratom = ['OD1','OD2','OE1','OE2','ND1','NE2','OG','OG1','OH']
 
 def calculate_number_bonds(structure):
     saltbridges=0

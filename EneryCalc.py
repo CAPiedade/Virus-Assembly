@@ -10,6 +10,7 @@ for direct in os.listdir(os.curdir):
         os.chdir(direct)
         try:
             D = dic_creator('dic_lig_'+direct+'.txt')
+            print (direct)
             os.chdir('../../')
             for i in range(54,61):
                 f = open('EstruturasT1/'+direct+'/'+direct+'_energy_gsym_'+str(i)+'.txt','w')
@@ -22,7 +23,8 @@ for direct in os.listdir(os.curdir):
                     print(Ener , file=f)
                 f.close()
             os.chdir('EstruturasT1')
+            os.system('mv '+direct+' '+direct+'pdb')
         except:
-            print(sys.error())
+            print(sys.exc_info())
             os.chdir('..')
             continue
