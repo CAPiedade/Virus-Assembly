@@ -35,6 +35,7 @@ Don't forget to check which Heuristic measure you are using by changing the Ener
 
 + When needed, use the files in the folders Group Symmetries and Graph Symmetries or generate them by running
   + gen_subgroups_recursive.py (you'll always need an origin file from where to start the recursion, such as the one provided in Group Symmetries)
+  + gen_subgroups.py (create the subgroups from scratch)
   + graph.py (for Graph Symmetries based on the Group Symmetries you have)
 
 #### Problems Still to Solve
