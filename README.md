@@ -31,7 +31,14 @@ Don't forget to check which Heuristic measure you are using by changing the Ener
 + Run the programs in this order (making the proper modifications to the programs to adapt to your situation)
   + downloadpdbT1tofolder.py
   + Calcular.py
-  + 
+  + EnergyCalc2.py
+    + Be sure to have the files GraphSymmetries___.txt and EnergyCalc_fun.py in the same folder and EnergyCalc2.py)
+    + Change the Energy Points in EnergyCalc_fun.py to your desired heuristic
+  + Tree_Graph.py
+    + Program with #exit() commands strategically positioned to select render best performance
+  + Analize the files graph_path_dEdN.txt for each PDB and look for the lowest energy combination
+
+  
 
 + When needed, use the files in the folders Group Symmetries and Graph Symmetries or generate them by running
   + gen_subgroups_recursive.py (you'll always need an origin file from where to start the recursion, such as the one provided in Group Symmetries)
