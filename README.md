@@ -29,13 +29,13 @@ Don't forget to check which Heuristic measure you are using by changing the Ener
 #### How to Use
 
 + Run the programs in this order (making the proper modifications to the programs to adapt to your situation)
-+ + downloadpdbT1tofolder.py
-+ + Calcular.py
-+ + 
+  + downloadpdbT1tofolder.py
+  + Calcular.py
+  + 
 
 + When needed, use the files in the folders Group Symmetries and Graph Symmetries or generate them by running
-+ + gen_subgroups_recursive.py (you'll always need an origin file from where to start the recursion, such as the one provided in Group Symmetries)
-+ + graph.py (for Graph Symmetries based on the Group Symmetries you have)
+  + gen_subgroups_recursive.py (you'll always need an origin file from where to start the recursion, such as the one provided in Group Symmetries)
+  + graph.py (for Graph Symmetries based on the Group Symmetries you have)
 
 #### Problems Still to Solve
 
@@ -44,6 +44,8 @@ Don't forget to check which Heuristic measure you are using by changing the Ener
 #### Author
 
 Cláudio Alexandre Guerra Silva Gomes da Piedade
+
 PhD Student of Applied Mathematics at Faculdade de Ciências da Universidade do Porto (Oporto, Portugal)
+
 MSc Student of Biochemistry at Faculdade de Ciências da Universidade de Lisboa (Lisbon, Portugal)
 
