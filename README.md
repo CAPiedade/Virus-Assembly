@@ -22,6 +22,18 @@ The PDB file must have each chain in a different model for it to work.
 #### WARNING
 
 This code will generate large amounts of data!
+Don't forget to check which Heuristic measure you are using by changing the Energy Points in File EnergyCalc_fun.py
+
+#### How to Use
+
++ Run the programs in this order (making the proper modifications to the programs to adapt to your situation)
+++ downloadpdbT1tofolder.py
+++ Calcular.py
+++ 
+
++ When needed, use the files in the folders Group Symmetries and Graph Symmetries or generate them by running
+++ gen_subgroups_recursive.py (you'll always need an origin file from where to start the recursion, such as the one provided in Group Symmetries)
+++ graph.py (for Graph Symmetries based on the Group Symmetries you have)
 
 #### Problems Still to Solve
 
