@@ -15,12 +15,13 @@ The PDB file must have each chain in a different model for it to work.
 + Numpy
 + BioPython
 + Anaconda Python is reccomended for other modules
++ igraph
 
 (anyothers that you may find, please inform me to add)
 
 #### WARNING
 
-This code will generate large amounts of data, so be prepared to have to use 
+This code will generate large amounts of data!
 
 #### Problems Still to Solve
 
@@ -29,4 +30,6 @@ This code will generate large amounts of data, so be prepared to have to use
 #### Author
 
 Cláudio Alexandre Guerra Silva Gomes da Piedade
-MSc Studente of Biochemistry at Faculdade de Ciências da Universidade de Lisboa (Lisbon, Portugal)
+PhD Student of Applied Mathematics at Faculdade de Ciências da Universidade do Porto (Oporto, Portugal)
+MSc Student of Biochemistry at Faculdade de Ciências da Universidade de Lisboa (Lisbon, Portugal)
+
