@@ -1,6 +1,6 @@
 # Virus Disassembly
 
-Python2.7 Code designed to calculate the interactions of a T=1 Virus Capsid based on the group symmetry of the arrangement of the proteins.
+Python2.7 Code designed to calculate the interactions of a *T=1* Virus Capsid based on the group symmetry of the arrangement of the proteins.
 
 This code allows to generate the different combinations of removing *N* proteins of a capsid based on the Icosahedral Group Symmetry.
 
@@ -47,5 +47,4 @@ Cláudio Alexandre Guerra Silva Gomes da Piedade
 
 PhD Student of Applied Mathematics at Faculdade de Ciências da Universidade do Porto (Oporto, Portugal)
 
-MSc Student of Biochemistry at Faculdade de Ciências da Universidade de Lisboa (Lisbon, Portugal)
-
+MSc in Biochemistry (2016)
