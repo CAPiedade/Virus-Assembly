@@ -48,6 +48,9 @@ Don't forget to check which Heuristic measure you are using by changing the Ener
 #### Problems Still to Solve
 
 + If some aminoacids are incomplete
++ T-number bigger than 1
++ Faster algorithm to build the Tree Graph of pathways
+
 
 #### Author
 
